@@ -12,7 +12,7 @@
     </script>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="css/map.css">
+    <link rel="stylesheet" href="css/index.css">
 
     <!-- Include D3.js library -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -23,6 +23,7 @@
 </head>
 
 <body>
+    <!-- Navigation bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">COVID Statistics</a>
@@ -57,7 +58,9 @@
     </nav>
 
 
-    <!-- Main -->
+
+
+    <!-- Main content -->
     <div class="mt-5 ms-5" id="loading">
         <div class="text-dark mt-5 fs-3">Loading the map ...</div>
         <div class="text-dark mt-2 fs-3">It can take a few seconds.</div>
@@ -67,11 +70,21 @@
     </div>
     <div id="map-container"></div>
 
+
+
+
+
     <!-- Script to render the map -->
     <script src="js/global-variables.js"></script>
     <script src="js/util.js"></script>
-    <script src="js/map.js"></script>
+    <script src="js/index.js"></script>
 
+    <!-- Main -->
+    <script src="js/main.js"></script>
+
+    <script>
+        index();
+    </script>
 </body>
 
 </html>
