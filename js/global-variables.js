@@ -1,0 +1,2 @@
+var countryName;
+var countryCode;

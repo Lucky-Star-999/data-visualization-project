@@ -1,7 +1,5 @@
-// Create a loading message element
+// Hide the map
 document.getElementById('map-container').hidden = true;
-const loadingMessage = document.getElementById("loading");
-document.body.appendChild(loadingMessage);
 
 // Set up the map container
 const container = d3.select("#map-container");
@@ -16,10 +14,11 @@ const svg = container
     .attr("width", width)
     .attr("height", height);
 
+
 // Load the GeoJSON data
 d3.json("https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson").then(
     function (data) {
-        loadingMessage.remove();
+        document.getElementById("loading").remove();
         document.getElementById('map-container').hidden = false;
         // Create a projection for the map
         const projection = d3.geoMercator()
@@ -41,11 +40,18 @@ d3.json("https://raw.githubusercontent.com/datasets/geo-countries/master/data/co
         svg.selectAll(".country")
             .on("mouseover", function (event, d) {
                 //d3.select(this).attr("fill", "red");
-                const countryName = d.properties.ADMIN;
-                const countryCode = d.properties.ISO_A2;
+                countryName = d.properties.ADMIN;
+                countryCode = d.properties.ISO_A2;
                 console.log(countryName + ` (${countryCode})`);
             })
             .on("mouseout", function (event, d) {
                 //d3.select(this).attr("fill", "initial");
             });
     });
+
+async function run() {
+    let data = await getJSONData("https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson");
+    console.log(data);
+}
+
+run();
