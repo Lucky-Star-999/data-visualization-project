@@ -1,0 +1,10 @@
+thead {
+    position: sticky;
+    top: 0;
+    background-color: #197f5a;
+    color: white;
+}
+
+#pagination:hover {
+    cursor: pointer;
+}

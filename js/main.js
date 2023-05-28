@@ -9,3 +9,6 @@ async function index() {
     await loadMap(data);
 }
 
+async function rawdata() {
+    await loadRawDataTableAllColumns();
+}
