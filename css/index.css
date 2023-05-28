@@ -1,7 +1,9 @@
 /* CSS styles for the map container */
 #map-container {
-    width: 1000px;
-    height: 600px;
+    width: 800px;
+    height: 450px;
+    overflow: hidden;
+    cursor: pointer;
 }
 
 /* CSS styles for the hover effect */
@@ -11,4 +13,7 @@
 
 .country {
     fill: #29c5f6;
+    stroke: white;
+    stroke-width: 0.3;
+    cursor: pointer;
 }

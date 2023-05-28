@@ -31,7 +31,7 @@ async function loadSVG() {
 
     // Define the width and height of the map
     width = parseInt(container.style("width"));
-    height = parseInt(container.style("height"));
+    height = parseInt(container.style("height")) + 250;
 
     // Create an SVG element within the container
     svg = container
@@ -44,6 +44,7 @@ async function loadSVG() {
 async function loadMap(data) {
     document.getElementById("loading").remove();
     document.getElementById('map-container').hidden = false;
+
     // Create a projection for the map
     const projection = d3.geoMercator()
         .fitSize([width, height], data);
@@ -51,13 +52,25 @@ async function loadMap(data) {
     // Create a path generator
     const path = d3.geoPath().projection(projection);
 
+    // Color scale for different colors in the map
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
     // Render the map
     svg.selectAll("path")
         .data(data.features)
         .enter()
         .append("path")
         .attr("d", path)
-        .attr("class", "country");
+        .attr("class", "country")
+        .attr("fill", (d, i) => colorScale(i));
+
+    let zoom = d3.zoom()
+        .scaleExtent([1, 8])
+        .on('zoom', function (event, d) {
+            svg.selectAll('path').attr('transform', event.transform);
+        });
+
+    svg.call(zoom);
 
 
     // Add hover interaction to the country elements
