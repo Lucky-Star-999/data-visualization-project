@@ -69,12 +69,19 @@
     </nav>
 
 
+    <h1 class="text-danger mt-5 ms-5" id="loading"></h1>
     <div id="map-container"></div>
 
 
 
     <!-- Script to render the map -->
     <script>
+        // Create a loading message element
+        document.getElementById('map-container').hidden = true;
+        const loadingMessage = document.getElementById("loading");
+        loadingMessage.textContent = 'Loading the map ... It can take a few seconds.';
+        document.body.appendChild(loadingMessage);
+
         // Set up the map container
         const container = d3.select("#map-container");
 
@@ -89,35 +96,38 @@
             .attr("height", height);
 
         // Load the GeoJSON data
-        d3.json("countries.geojson.json").then(function (data) {
-            // Create a projection for the map
-            const projection = d3.geoMercator()
-                .fitSize([width, height], data);
+        d3.json("https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson").then(
+            function (data) {
+                loadingMessage.remove();
+                document.getElementById('map-container').hidden = false;
+                // Create a projection for the map
+                const projection = d3.geoMercator()
+                    .fitSize([width, height], data);
 
-            // Create a path generator
-            const path = d3.geoPath().projection(projection);
+                // Create a path generator
+                const path = d3.geoPath().projection(projection);
 
-            // Render the map
-            svg.selectAll("path")
-                .data(data.features)
-                .enter()
-                .append("path")
-                .attr("d", path)
-                .attr("class", "country");
+                // Render the map
+                svg.selectAll("path")
+                    .data(data.features)
+                    .enter()
+                    .append("path")
+                    .attr("d", path)
+                    .attr("class", "country");
 
 
-            // Add hover interaction to the country elements
-            svg.selectAll(".country")
-                .on("mouseover", function (event, d) {
-                    //d3.select(this).attr("fill", "red");
-                    const countryName = d.properties.ADMIN;
-                    const countryCode = d.properties.ISO_A2;
-                    console.log(countryName + ` (${countryCode})`);
-                })
-                .on("mouseout", function (event, d) {
-                    //d3.select(this).attr("fill", "initial");
-                });
-        });
+                // Add hover interaction to the country elements
+                svg.selectAll(".country")
+                    .on("mouseover", function (event, d) {
+                        //d3.select(this).attr("fill", "red");
+                        const countryName = d.properties.ADMIN;
+                        const countryCode = d.properties.ISO_A2;
+                        console.log(countryName + ` (${countryCode})`);
+                    })
+                    .on("mouseout", function (event, d) {
+                        //d3.select(this).attr("fill", "initial");
+                    });
+            });
     </script>
 
 </body>
