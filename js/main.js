@@ -10,5 +10,5 @@ async function index() {
 }
 
 async function rawdata() {
-    await loadRawDataTableByDate('1/20/20');
+    await loadRawDataTableByDate('1/22/20');
 }
