@@ -24,7 +24,7 @@ async function getJSONData(url) {
 // Init and Load SVG
 async function loadSVG() {
     // Hide the map
-    document.getElementById('map-container').hidden = true;
+    document.getElementById('main').hidden = true;
 
     // Set up the map container
     const container = d3.select("#map-container");
@@ -43,7 +43,7 @@ async function loadSVG() {
 // Load the map
 async function loadMap(data) {
     document.getElementById("loading").remove();
-    document.getElementById('map-container').hidden = false;
+    document.getElementById('main').hidden = false;
 
     // Create a projection for the map
     const projection = d3.geoMercator()
