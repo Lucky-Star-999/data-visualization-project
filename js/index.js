@@ -1,3 +1,26 @@
+// Sizing
+var width;
+var height;
+
+// Elements
+var svg;
+
+// Countries
+var countryName;
+var countryCode;
+
+
+async function getJSONData(url) {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.log('An error occurred while loading the data: ', error);
+        throw error;
+    }
+}
+
 // Init and Load SVG
 async function loadSVG() {
     // Hide the map
