@@ -9,6 +9,29 @@ var svg;
 var countryName;
 var countryCode;
 
+// Date
+var choosenDate;
+
+// Date
+var choosenDate;
+
+// COVID Cases
+var covidCase = 'Insert result in function showPanel() in index.js (Line 23)';
+
+//////////////////////////////////////////////////////
+
+// Render the result in the panel
+async function showPanel() {
+    // Render country
+    document.getElementById("result-country").innerText = countryName + ` (${countryCode})`;
+
+    // Render the result case
+    document.getElementById("result-case").innerHTML = `COVID Cases: <b>${covidCase}</b>`;
+
+    // Render date
+    let resultDate = await getFormattedDate();
+    document.getElementById("result-date").innerText = resultDate;
+}
 
 async function getJSONData(url) {
     try {
@@ -19,6 +42,18 @@ async function getJSONData(url) {
         console.log('An error occurred while loading the data: ', error);
         throw error;
     }
+}
+
+async function getChoosenDate() {
+    let rawDate = document.getElementById("datepicker").value;
+    choosenDate = rawDate;
+    return rawDate;
+}
+
+async function getFormattedDate() {
+    let rawDate = document.getElementById("datepicker").value;
+    choosenDate = rawDate;
+    return `Record date: ${rawDate[8]}${rawDate[9]}/${rawDate[5]}${rawDate[6]}/${rawDate[0]}${rawDate[1]}${rawDate[2]}${rawDate[3]}`;
 }
 
 // Init and Load SVG
@@ -72,24 +107,19 @@ async function loadMap(data) {
 
     svg.call(zoom);
 
-
     // Add hover interaction to the country elements
     svg.selectAll(".country")
         .on("mouseover", function (event, d) {
             //d3.select(this).attr("fill", "red");
             countryName = d.properties.ADMIN;
             countryCode = d.properties.ISO_A2;
-            console.log(countryName + ` (${countryCode})`);
+            // console.log(countryName + ` (${countryCode})`);
+            showPanel();
         })
         .on("mouseout", function (event, d) {
             //d3.select(this).attr("fill", "initial");
         });
 }
-
-
-
-
-
 
 
 // // Load the GeoJSON data
