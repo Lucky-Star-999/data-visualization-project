@@ -10,5 +10,5 @@ async function index() {
 }
 
 async function rawdata() {
-    await loadRawDataTableAllColumns();
+    await loadRawDataTableByDate('1/20/20');
 }

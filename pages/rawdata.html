@@ -73,8 +73,21 @@
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
+
         <div id="main" class="mt-4">
-            <div class="table-responsive" style="height: 400px;">
+            <form class="row">
+                <div class="col-1">
+                    <label for="datepicker" class="col-1 col-form-label">Date: </label>
+                </div>
+                <div class="col-3">
+                    <input type="date" class="form-control" id="datepicker" placeholder="Select a date"
+                        value="2020-01-20">
+                </div>
+                <div class="col-3">
+                    <button type="button" class="btn btn-primary" onclick="handleSearch()">Search</button>
+                </div>
+            </form>
+            <div class="table-responsive mt-3" style="height: 400px;">
                 <table id="csvTable" class="table table-hover table-striped table-bordered"></table>
             </div>
             <!-- Pagination -->
@@ -92,6 +105,24 @@
 
     <script>
         rawdata();
+
+        function handleSearch() {
+            let rawDate = document.getElementById("datepicker").value;
+
+            let formattedDate;
+
+            if (rawDate[5].toString() === '0' && rawDate[8].toString() === '0') {
+                formattedDate = `${rawDate[6]}/${rawDate[9]}/${rawDate[2]}${rawDate[3]}`;
+            } else if (rawDate[5].toString() === '0') {
+                formattedDate = `${rawDate[6]}/${rawDate[8]}${rawDate[9]}/${rawDate[2]}${rawDate[3]}`;
+            } else if (rawDate[8].toString() === '0') {
+                formattedDate = `${rawDate[5]}${rawDate[6]}/${rawDate[9]}/${rawDate[2]}${rawDate[3]}`;
+            } else {
+                formattedDate = `${rawDate[5]}${rawDate[6]}/${rawDate[8]}${rawDate[9]}/${rawDate[2]}${rawDate[3]}`;
+            }
+
+            loadRawDataTableByDate(formattedDate);
+        }
     </script>
 
 </body>
