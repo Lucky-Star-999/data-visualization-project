@@ -12,3 +12,11 @@ async function index() {
 async function rawdata() {
     await loadRawDataTableByDate('1/22/20');
 }
+
+async function analyzeddata(recordDate) {
+    // Get top 5 countries having mose COVID cases
+    let topCountries = await getTopCountriesData(recordDate);
+
+    // Load the chart
+    await loadChart(topCountries);
+}

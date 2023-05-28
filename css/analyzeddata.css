@@ -1,0 +1,22 @@
+.bar {
+    fill: steelblue;
+}
+
+.bar-label {
+    font-size: 12px;
+    text-anchor: end;
+    fill: #333;
+}
+
+.y-axis text {
+    font-size: 15px;
+}
+
+.x-axis text {
+    font-size: 15px;
+}
+
+.bar:hover {
+    fill: #03254c;
+    cursor: pointer;
+}
