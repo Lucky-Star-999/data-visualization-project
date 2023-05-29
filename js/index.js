@@ -146,7 +146,7 @@ async function loadMap(data) {
 
 async function getCountryData(country, recordDate) {
     // CSV file URL
-    const csvFile = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
+    const csvFile = '../data/time_series_covid19_confirmed_global.csv';
 
     try {
         const data = await d3.csv(csvFile);
