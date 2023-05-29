@@ -7,6 +7,10 @@ async function index() {
 
     // Load the map
     await loadMap(data);
+
+    // First load COVID Case Result
+    let csvDate = await getCsvDate();
+    covidCasesResultList = await getCountryData(csvDate);
 }
 
 async function rawdata() {

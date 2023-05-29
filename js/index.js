@@ -16,7 +16,7 @@ var choosenDate;
 var choosenDate;
 
 // COVID Cases
-var covidCase = 'Insert result in function showPanel() in index.js (Line 23)';
+var covidCase;
 
 //////////////////////////////////////////////////////
 
@@ -24,6 +24,10 @@ var covidCase = 'Insert result in function showPanel() in index.js (Line 23)';
 async function showPanel() {
     // Render country
     document.getElementById("result-country").innerText = countryName + ` (${countryCode})`;
+
+    // Get COVID Case
+    let csvDate = await getCsvDate();
+    let covidCase = await getCountryData(countryName, csvDate);
 
     // Render the result case
     document.getElementById("result-case").innerHTML = `COVID Cases: <b>${covidCase}</b>`;
@@ -54,6 +58,24 @@ async function getFormattedDate() {
     let rawDate = document.getElementById("datepicker").value;
     choosenDate = rawDate;
     return `Record date: ${rawDate[8]}${rawDate[9]}/${rawDate[5]}${rawDate[6]}/${rawDate[0]}${rawDate[1]}${rawDate[2]}${rawDate[3]}`;
+}
+
+async function getCsvDate() {
+    let rawDate = document.getElementById("datepicker").value;
+
+    let formattedDate;
+
+    if (rawDate[5].toString() === '0' && rawDate[8].toString() === '0') {
+        formattedDate = `${rawDate[6]}/${rawDate[9]}/${rawDate[2]}${rawDate[3]}`;
+    } else if (rawDate[5].toString() === '0') {
+        formattedDate = `${rawDate[6]}/${rawDate[8]}${rawDate[9]}/${rawDate[2]}${rawDate[3]}`;
+    } else if (rawDate[8].toString() === '0') {
+        formattedDate = `${rawDate[5]}${rawDate[6]}/${rawDate[9]}/${rawDate[2]}${rawDate[3]}`;
+    } else {
+        formattedDate = `${rawDate[5]}${rawDate[6]}/${rawDate[8]}${rawDate[9]}/${rawDate[2]}${rawDate[3]}`;
+    }
+
+    return formattedDate;
 }
 
 // Init and Load SVG
@@ -122,36 +144,19 @@ async function loadMap(data) {
 }
 
 
-// // Load the GeoJSON data
-// d3.json("https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson").then(
-//     function (data) {
-//         document.getElementById("loading").remove();
-//         document.getElementById('map-container').hidden = false;
-//         // Create a projection for the map
-//         const projection = d3.geoMercator()
-//             .fitSize([width, height], data);
+async function getCountryData(country, recordDate) {
+    // CSV file URL
+    const csvFile = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
 
-//         // Create a path generator
-//         const path = d3.geoPath().projection(projection);
+    try {
+        const data = await d3.csv(csvFile);
 
-//         // Render the map
-//         svg.selectAll("path")
-//             .data(data.features)
-//             .enter()
-//             .append("path")
-//             .attr("d", path)
-//             .attr("class", "country");
+        // Filter data by country
+        const filteredData = data.filter(row => row['Country/Region'] === country);
 
-
-//         // Add hover interaction to the country elements
-//         svg.selectAll(".country")
-//             .on("mouseover", function (event, d) {
-//                 //d3.select(this).attr("fill", "red");
-//                 countryName = d.properties.ADMIN;
-//                 countryCode = d.properties.ISO_A2;
-//                 console.log(countryName + ` (${countryCode})`);
-//             })
-//             .on("mouseout", function (event, d) {
-//                 //d3.select(this).attr("fill", "initial");
-//             });
-//     });
+        // Return the country data
+        return filteredData[0][recordDate.toString()];
+    } catch (error) {
+        return 0;
+    }
+}

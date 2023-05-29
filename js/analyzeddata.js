@@ -1,39 +1,39 @@
 async function getTopCountriesData(recordDate) {
     // CSV file URL
     const csvFile = '../data/time_series_covid19_confirmed_global.csv';
-  
+
     try {
-      const data = await d3.csv(csvFile);
-  
-      // Aggregate the COVID cases by 'Country/Region'
-      const countriesData = {};
-  
-      data.forEach(function (row) {
-        const country = row['Country/Region'];
-        const cases = parseInt(row[recordDate]);
-  
-        if (!countriesData[country]) {
-          countriesData[country] = cases;
-        } else {
-          countriesData[country] += cases;
-        }
-      });
-  
-      // Convert countriesData object to an array of objects
-      const countriesArray = Object.entries(countriesData).map(([country, cases]) => ({
-        country,
-        cases
-      }));
-  
-      // Sort the countriesArray in descending order based on cases
-      countriesArray.sort((a, b) => b.cases - a.cases);
-  
-      // Return the top 5 countries
-      return countriesArray.slice(0, 5);
+        const data = await d3.csv(csvFile);
+
+        // Aggregate the COVID cases by 'Country/Region'
+        const countriesData = {};
+
+        data.forEach(function (row) {
+            const country = row['Country/Region'];
+            const cases = parseInt(row[recordDate]);
+
+            if (!countriesData[country]) {
+                countriesData[country] = cases;
+            } else {
+                countriesData[country] += cases;
+            }
+        });
+
+        // Convert countriesData object to an array of objects
+        const countriesArray = Object.entries(countriesData).map(([country, cases]) => ({
+            country,
+            cases
+        }));
+
+        // Sort the countriesArray in descending order based on cases
+        countriesArray.sort((a, b) => b.cases - a.cases);
+
+        // Return the top 5 countries
+        return countriesArray.slice(0, 5);
     } catch (error) {
-      throw error;
+        throw error;
     }
-  }
+}
 
 async function loadChart(topCountries) {
     const width = 1150;
@@ -100,50 +100,3 @@ async function loadChart(topCountries) {
         .attr("transform", `translate(${margin.left}, 0)`)
         .call(d3.axisLeft(yScale));
 }
-
-
-
-
-// async function getTopCountriesData() {
-//     // CSV file URL
-//     const csvFile = '../data/time_series_covid19_confirmed_global.csv';
-
-//     return new Promise((resolve, reject) => {
-//         Papa.parse(csvFile, {
-//             header: true, // Treat the first row as the header
-//             download: true,
-//             complete: function (results) {
-//                 const data = results.data;
-
-//                 // Aggregate the COVID cases by 'Country/Region'
-//                 const countriesData = {};
-
-//                 data.forEach(function (row) {
-//                     const country = row['Country/Region'];
-//                     const cases = parseInt(row['12/22/20']);
-
-//                     if (!countriesData[country]) {
-//                         countriesData[country] = cases;
-//                     } else {
-//                         countriesData[country] += cases;
-//                     }
-//                 });
-
-//                 // Convert countriesData object to an array of objects
-//                 const countriesArray = Object.entries(countriesData).map(([country, cases]) => ({
-//                     country,
-//                     cases
-//                 }));
-
-//                 // Sort the countriesArray in descending order based on cases
-//                 countriesArray.sort((a, b) => b.cases - a.cases);
-
-//                 // Return the top 5 countries
-//                 resolve(countriesArray.slice(0, 5));
-//             },
-//             error: function (error) {
-//                 reject(error);
-//             }
-//         });
-//     });
-// }
