@@ -36,6 +36,11 @@ async function getTopCountriesData(recordDate) {
 }
 
 async function loadChart(topCountries) {
+    if (document.getElementById("loading") != null) {
+        document.getElementById("loading").remove();
+    }
+    document.getElementById('main').hidden = false;
+
     const width = 1150;
     const height = 350;
     const margin = {
@@ -84,7 +89,7 @@ async function loadChart(topCountries) {
         .attr("y", d => yScale(d.country) + yScale.bandwidth() / 2)
         .attr("dy", "0.35em")
         .style("fill", "black")
-        .style("font-size", "14px")
+        .style("font-size", "13px")
         .style("text-anchor", "start")
         .text(d => d.cases.toLocaleString());
 

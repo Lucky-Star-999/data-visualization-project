@@ -29,6 +29,8 @@ async function rawdata() {
 }
 
 async function analyzeddata(recordDate) {
+    document.getElementById('main').hidden = true;
+
     // Get top 5 countries having mose COVID cases
     let topCountries = await getTopCountriesData(recordDate);
 
