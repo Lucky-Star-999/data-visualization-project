@@ -30,7 +30,7 @@ async function showPanel() {
     let covidCase = await getCountryData(countryName, csvDate);
 
     // Render the result case
-    document.getElementById("result-case").innerHTML = `COVID Cases: <b>${covidCase}</b>`;
+    document.getElementById("result-case").innerHTML = `COVID Cases: <b>${covidCase.toLocaleString('en-US')}</b>`;
 
     // Render date
     let resultDate = await getFormattedDate();
@@ -271,8 +271,14 @@ async function getCountryData(country, recordDate) {
         // Filter data by country
         const filteredData = data.filter(row => row['Country/Region'] === country);
 
-        // Return the country data
-        return filteredData[0][recordDate.toString()];
+        // Sum up the cases for the country
+        const totalCases = filteredData.reduce((sum, row) => {
+            const cases = parseInt(row[recordDate.toString()]);
+            return sum + cases;
+        }, 0);
+
+        // Return the total cases
+        return totalCases;
     } catch (error) {
         return 0;
     }
