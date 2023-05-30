@@ -48,6 +48,34 @@ async function getJSONData(url) {
     }
 }
 
+async function getSpecificColumnsFromCSV(recordDate) {
+    let columns = ['Country/Region'];
+    columns.push(recordDate);
+    let csvFile = '../data/time_series_covid19_confirmed_global.csv';
+    const data = await d3.csv(csvFile);
+
+    const summedData = data.reduce((result, item) => {
+        const country = item['Country/Region'];
+        const cases = parseInt(item[recordDate]);
+
+        if (!result[country]) {
+            result[country] = cases;
+        } else {
+            result[country] += cases;
+        }
+
+        return result;
+    }, {});
+
+    const extractedData = Object.entries(summedData).map(([country, cases]) => ({
+        'Country/Region': country,
+        Cases: cases
+    }));
+
+    return extractedData;
+}
+
+
 async function getChoosenDate() {
     let rawDate = document.getElementById("datepicker").value;
     choosenDate = rawDate;
@@ -78,6 +106,76 @@ async function getCsvDate() {
     return formattedDate;
 }
 
+async function loadLegend() {
+
+    document.getElementById("map-container-2").innerHTML = '';
+
+    // Set up the map container
+    const container2 = d3.select("#map-container-2");
+
+    // Define the width and height of the map
+    let width2 = 150;
+    let height2 = 180;
+
+    // Create an SVG element within the container
+    let svg2 = container2
+        .append("svg")
+        .attr("width", width2)
+        .attr("height", height2);
+
+    const colorCategories = [{
+            color: '#2cba00',
+            label: '0'
+        },
+        {
+            color: '#a3ff00',
+            label: '1 - 5000'
+        },
+        {
+            color: '#fff400',
+            label: '5001 - 500000'
+        },
+        {
+            color: '#ffa700',
+            label: '500001 - 5000000'
+        },
+        {
+            color: '#ff0000',
+            label: '> 5000000'
+        }
+    ];
+
+    const legendWidth = 20;
+    const legendHeight = 20;
+    const legendX = 10;
+    const legendY = 20;
+    const legendSpacing = 10;
+
+    // Create the legend group
+    const legend = svg2.append('g')
+        .attr('class', 'legend')
+        .attr('transform', `translate(${legendX}, ${legendY})`);
+
+    // Create legend rectangles and labels
+    const legendItems = legend.selectAll('.legend-item')
+        .data(colorCategories)
+        .enter()
+        .append('g')
+        .attr('class', 'legend-item')
+        .attr('transform', (d, i) => `translate(0, ${i * (legendHeight + legendSpacing)})`);
+
+    legendItems.append('rect')
+        .attr('width', legendWidth)
+        .attr('height', legendHeight)
+        .attr('fill', (d) => d.color);
+
+    legendItems.append('text')
+        .attr('x', legendWidth + 10)
+        .attr('y', legendHeight / 2)
+        .attr('dy', '0.35em')
+        .text((d) => d.label);
+}
+
 // Init and Load SVG
 async function loadSVG() {
     // Hide the map
@@ -98,9 +196,13 @@ async function loadSVG() {
 }
 
 // Load the map
-async function loadMap(data) {
-    document.getElementById("loading").remove();
+async function loadMap(data, caseData) {
+    if (document.getElementById("loading") != null) {
+        document.getElementById("loading").remove();
+    }
     document.getElementById('main').hidden = false;
+
+    document.getElementsByTagName('svg')[0].innerHTML = '';
 
     // Create a projection for the map
     const projection = d3.geoMercator()
@@ -109,9 +211,6 @@ async function loadMap(data) {
     // Create a path generator
     const path = d3.geoPath().projection(projection);
 
-    // Color scale for different colors in the map
-    const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
-
     // Render the map
     svg.selectAll("path")
         .data(data.features)
@@ -119,7 +218,22 @@ async function loadMap(data) {
         .append("path")
         .attr("d", path)
         .attr("class", "country")
-        .attr("fill", (d, i) => colorScale(i));
+        .attr("fill", (d) => {
+            const country = d.properties.ADMIN;
+            const countryData = caseData.find((item) => item['Country/Region'] === country);
+            const cases = countryData ? countryData.Cases : 0;
+            if (cases <= 0) {
+                return '#2cba00';
+            } else if (cases <= 5000) {
+                return '#a3ff00';
+            } else if (cases <= 500000) {
+                return '#fff400';
+            } else if (cases <= 5000000) {
+                return '#ffa700';
+            } else {
+                return '#ff0000';
+            }
+        });
 
     let zoom = d3.zoom()
         .scaleExtent([1, 8])
@@ -141,6 +255,9 @@ async function loadMap(data) {
         .on("mouseout", function (event, d) {
             //d3.select(this).attr("fill", "initial");
         });
+
+
+
 }
 
 

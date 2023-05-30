@@ -1,3 +1,5 @@
+var mapData;
+
 async function index() {
     // Init + Create SVG
     await loadSVG();
@@ -5,8 +7,17 @@ async function index() {
     // get GeoJSON Data
     let data = await getJSONData("https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson");
 
+    // Load legend
+    await loadLegend();
+
+    // Assign to global mapData
+    mapData = data;
+
+    // Get cases data
+    let caseData = await getSpecificColumnsFromCSV('1/22/20');
+
     // Load the map
-    await loadMap(data);
+    await loadMap(data, caseData);
 
     // First load COVID Case Result
     let csvDate = await getCsvDate();

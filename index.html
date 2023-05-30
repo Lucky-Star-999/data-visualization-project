@@ -81,7 +81,7 @@
                 </div>
                 <div class="col-3">
                     <input type="date" class="form-control" id="datepicker" placeholder="Select a date"
-                        value="2020-01-22">
+                        value="2020-01-22" onchange="handleChange()">
                 </div>
             </form>
             <div class="row">
@@ -91,14 +91,20 @@
                 <div class="col-3">
                     <div class="card text-center">
                         <div class="card-header">
-                          Result
+                            Result
                         </div>
                         <div class="card-body">
-                          <h5 class="card-title" id="result-country"></h5>
-                          <p class="card-text" id="result-case"></p>
+                            <h5 class="card-title" id="result-country"></h5>
+                            <p class="card-text" id="result-case"></p>
                         </div>
                         <div class="card-footer text-muted" id="result-date"></div>
-                      </div>
+                    </div>
+                    <div>
+                        <div class="mt-5 border border-dark" id="map-container-2"></div>
+                    </div>
+                    <div class="mt-2">
+                        <p class="text-center">COVID Cases</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -117,6 +123,16 @@
 
     <script>
         index();
+
+        async function handleChange() {
+            let recordDate = await getCsvDate();
+
+            let caseData = await getSpecificColumnsFromCSV(recordDate);
+
+            // mapData is in the main.js
+            // Render the map
+            await loadMap(mapData, caseData);
+        }
     </script>
 </body>
 

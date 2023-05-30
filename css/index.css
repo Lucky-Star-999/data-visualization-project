@@ -8,11 +8,11 @@
 
 /* CSS styles for the hover effect */
 .country:hover {
-    fill: orange;
+    fill: purple;
 }
 
 .country {
-    fill: #29c5f6;
+    /* fill: #29c5f6; */
     stroke: white;
     stroke-width: 0.3;
     cursor: pointer;
