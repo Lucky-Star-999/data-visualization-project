@@ -129,19 +129,19 @@ async function loadLegend() {
         },
         {
             color: '#a3ff00',
-            label: '1 - 5000'
+            label: '1 - 5,000'
         },
         {
             color: '#fff400',
-            label: '5001 - 500000'
+            label: '5,001 - 500,000'
         },
         {
             color: '#ffa700',
-            label: '500001 - 5000000'
+            label: '500,001 - 5,000,000'
         },
         {
             color: '#ff0000',
-            label: '> 5000000'
+            label: '> 5,000,000'
         }
     ];
 
