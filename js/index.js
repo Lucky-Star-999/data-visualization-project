@@ -125,11 +125,11 @@ async function loadLegend() {
 
     const colorCategories = [{
             color: '#2cba00',
-            label: '0'
+            label: '< 50'
         },
         {
             color: '#a3ff00',
-            label: '1 - 5,000'
+            label: '51 - 5,000'
         },
         {
             color: '#fff400',
@@ -222,7 +222,7 @@ async function loadMap(data, caseData) {
             const country = d.properties.ADMIN;
             const countryData = caseData.find((item) => item['Country/Region'] === country);
             const cases = countryData ? countryData.Cases : 0;
-            if (cases <= 0) {
+            if (cases <= 50) {
                 return '#2cba00';
             } else if (cases <= 5000) {
                 return '#a3ff00';
