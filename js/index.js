@@ -114,7 +114,7 @@ async function loadLegend() {
     const container2 = d3.select("#map-container-2");
 
     // Define the width and height of the map
-    let width2 = 150;
+    let width2 = 200;
     let height2 = 180;
 
     // Create an SVG element within the container
