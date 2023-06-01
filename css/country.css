@@ -1,0 +1,9 @@
+#map-container {
+    width: 100%;
+    z-index: 5;
+}
+
+.axis-label {
+    font-size: 20px;
+    font-weight: 600;
+}

@@ -249,8 +249,14 @@ async function loadMap(data, caseData) {
             //d3.select(this).attr("fill", "red");
             countryName = d.properties.ADMIN;
             countryCode = d.properties.ISO_A2;
+
             // console.log(countryName + ` (${countryCode})`);
             showPanel();
+        })
+        .on("mousedown", function (event, d) {
+            countryName = d.properties.ADMIN;
+            countryCode = d.properties.ISO_A2;
+            window.location.href=`/pages/country.html?country=${encodeURIComponent(countryName)}`;
         })
         .on("mouseout", function (event, d) {
             //d3.select(this).attr("fill", "initial");
